@@ -7,10 +7,11 @@ import argv from './server/argv';
 const errorsParser = require('alouette');
 import ErrorHtmlRenderer from 'alouette/lib/HtmlRenderer';
 const errorHtmlRenderer = new ErrorHtmlRenderer();
-import {webSocketPort} from './server/webSocket'
+import {webSocketPort} from './server/screenSocket'
 import { ConsoleLogger, LogLevel } from 'nightingale';
 
-import layout from './server/views/Html'
+import iframe from './server/views/Iframe'
+import admin from './server/views/Admin'
 
 const logger = new ConsoleLogger('watchme', LogLevel.ALL);
 const port = argv.port || 3000;
@@ -42,7 +43,7 @@ app.listen(port, () => {
 
 
 app.get('/admin', function(req, res){
-    res.end(layout({ hostname: req.hostname, webSocketPort }));
+    res.end(admin({ hostname: req.hostname, webSocketPort }));
 });
 
 app.get('/:name*?', function(req, res){

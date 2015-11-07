@@ -33,17 +33,17 @@ export default function({ hostname, webSocketPort, url }) {
   }
 
   function renderScreen(screen) {
-    return `
+    return \`
     <div class="form-group">
         <div class="btn-group" data-toggle="buttons">
             <label for="basic-url">${screen.name}</label>
             <div class="input-group">
               <span class="input-group-addon" id="basic-addon3">http://</span>
-              <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{screen.url}">
+              <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{screen.url}"></input>
             </div>
         </div>
     </div>
-    `;
+    \`;
   }
 
   socket.on('connect', function() {

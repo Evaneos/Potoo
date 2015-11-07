@@ -1,4 +1,4 @@
-var socket = io("http://${ hostname }:${ webSocketPort }", {query: "who=admin"});
+var socket = io(`http://${ window.hostname }:${ window.webSocketPort }`, {query: "who=admin"});
 
 function showNumbers() {
   console.log('askShowNumbers');

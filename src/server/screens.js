@@ -1,6 +1,6 @@
  const screens = [
     {
-        name: 'Dehli',
+        name: 'Delhi',
         url: 'http://instantcal.potoo.io/Dehli'
     },
     {

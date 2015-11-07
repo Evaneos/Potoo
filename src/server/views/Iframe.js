@@ -1,6 +1,5 @@
 export default function({ hostname, webSocketPort, url }) {
-    return `
-<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html>
 <head>
 <style type="text/css">

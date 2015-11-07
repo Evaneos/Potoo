@@ -4,7 +4,7 @@ import argv from './argv';
 import { ConsoleLogger } from 'nightingale';
 import errorParser from 'alouette';
 
-const logger = new ConsoleLogger('screenSocket');
+const logger = new ConsoleLogger('webSocket');
 
 const screensById = new Map();
 const screensByName = new Map();

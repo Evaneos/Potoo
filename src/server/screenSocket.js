@@ -23,21 +23,28 @@ io.use(function(socket, next) {
 server.listen(webSocketPort);
 
 
-function showNumbers() {
+function showNumbers(socket) {
+    console.log('showNumbers');
     areNumbersShown = true;
     let i = 1;
-    screnFactory.screensById.forEach(screen => {
-        screen.emit('showNumber', {number: i, name: screen.name});
-        console.log('showNumbers');
+    screenFactory.screens.forEach(screen => {
+        screen.socket.emit('showNumber', {number: i, name: screen.name});
         i ++;
     })
+    socket.broadcast.to('admin').emit('showNumbers');
 }
 
-function removeNumbers() {
-    screnFactory.screensById.forEach(screen => screen.emit('removeNumber', 'remove'))
+function removeNumbers(socket) {
+    screenFactory.screensById.forEach(screen => screen.socket.emit('removeNumber', 'remove'))
+    socket.broadcast.to('admin').emit('removeNumbers');
 }
 
 io.on('connection', socket => {
+    let who = socket.request._query['who'];
+    console.log('who: ' + who);
+    if (who = 'admin') {
+        socket.join('admin');
+    }
     console.log('new connection');
     socket.on('addScreen', name => {
         name = decodeURIComponent(name.substring(1));
@@ -51,17 +58,23 @@ io.on('connection', socket => {
             showNumbers();
         }
 
-        socket.on('askShowNumbers', msg => {
-            console.log('askNumbers');
-            showNumbers();
-        })
-        socket.on('askRemoveNumbers', msg => {
-            console.log('askRemoveNumbers');
-            removeNumbers();
-        })
-
         console.log(screenFactory.getScreenInfos());
     });
+
+
+    socket.on('askShowNumbers', msg => {
+        console.log('askNumbers');
+        showNumbers(socket);
+    })
+    socket.on('askRemoveNumbers', msg => {
+        console.log('askRemoveNumbers');
+        removeNumbers(socket);
+    })
+
+    screenFactory.listener.on('changed', function() {
+        console.log('changed');
+        socket.broadcast.to('admin').emit('screens', screenFactory.getScreensWithoutSocket());
+    })
 });
 
 

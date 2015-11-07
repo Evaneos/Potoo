@@ -21,7 +21,7 @@ iframe.watchme_iframe {
 }
 
 .watchme_number {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.8);
     color: white;
     text-align: center;
     width: 100%;
@@ -47,10 +47,12 @@ iframe.watchme_iframe {
 <script>
 
 
-  var socket = io("http://${ hostname }:${ webSocketPort }");
+  var socket = io("http://${ hostname }:${ webSocketPort }", {query: "who=screen"});
   socket.on('connect', function() {
         console.log('connected');
         socket.on('showNumber', function(msg) {
+            console.log('showNumbers');
+            $(".watchme_number").remove();
             $("body").append('<div class="watchme_number"><span>' + msg.number + '<br/><span class="watchme_name">' + msg.name + '</span></span></div>');
         })
 

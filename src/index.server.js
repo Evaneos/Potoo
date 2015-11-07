@@ -50,5 +50,5 @@ app.get('/:name*?', function(req, res){
     console.log(req.params.name);
     const name = decodeURIComponent(req.params.name);
     let url = 'http://www.evaneos.com';
-    res.end(layout({ hostname: req.hostname, webSocketPort, url }));
+    res.end(iframe({ hostname: req.hostname, webSocketPort, url }));
 });

@@ -8,7 +8,7 @@ export default function({ hostname, webSocketPort, url }) {
 }
 
 .watchme_screen_toolbar:hover .glyphicon {
-    opacity: 1;
+    opacity: 0;
 }
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>

@@ -12,6 +12,7 @@ import { ConsoleLogger, LogLevel } from 'nightingale';
 
 import iframe from './server/views/Iframe'
 import admin from './server/views/Admin'
+import empty from './server/views/Empty'
 
 const logger = new ConsoleLogger('watchme', LogLevel.ALL);
 const port = argv.port || 3000;

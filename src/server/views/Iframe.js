@@ -1,4 +1,4 @@
-export default function({ hostname, webSocketPort, url }) {
+export default function({ hostname, webSocketPort }) {
     return `<!DOCTYPE html>
 <html>
 <head>
@@ -87,7 +87,7 @@ iframe.watchme_iframe {
 
 <body>
 <!-- https://docs.google.com/spreadsheets/d/1LRZiQpNFHpaFiWQg_HzMOk6X1EGrUhFzFiFnIJ05GHE/edit?usp=sharing-->
-    <iframe frameborder="0"  height="100%" width="100%" class="watchme_iframe" src="${ url }"></iframe>
+    <iframe frameborder="0"  height="100%" width="100%" class="watchme_iframe" src="/empty"></iframe>
 </body>
 </html>
     `

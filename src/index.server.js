@@ -43,12 +43,25 @@ app.listen(port, () => {
 
 
 app.get('/admin', function(req, res){
-    res.end(admin({ hostname: req.hostname, webSocketPort }));
+    res.setHeader('Content-Type', 'text/html');
+    let string = admin({ hostname: req.hostname, webSocketPort });
+    res.setHeader('Content-Length', string.length);
+    res.statusCode = 200;
+    res.end(string);
+});
+
+app.get('/empty', function(req, res){
+    res.setHeader('Content-Type', 'text/html');
+    let string = empty();
+    res.setHeader('Content-Length', string.length);
+    res.statusCode = 200;
+    res.end(string);
 });
 
 app.get('/:name*?', function(req, res){
-    console.log('name: '+ req.params.name);
-    const name = decodeURIComponent(req.params.name);
-    let url = 'http://www.evaneos.com';
-    res.end(iframe({ hostname: req.hostname, webSocketPort, url }));
+    res.setHeader('Content-Type', 'text/html');
+    let string = iframe({ hostname: req.hostname, webSocketPort });
+    res.setHeader('Content-Length', string.length);
+    res.statusCode = 200;
+    res.end(string);
 });

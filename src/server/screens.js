@@ -1,7 +1,7 @@
  const screens = [
     {
         name: 'Delhi',
-        url: 'http://instantcal.potoo.io/Dehli'
+        url: 'http://instantcal.potoo.io/Delhi'
     },
     {
         name: 'Pekin',

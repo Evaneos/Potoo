@@ -16,20 +16,32 @@ export function getScreenInfos() {
 export function getScreensWithoutSocket() {
     var screensWithoutSocket = [];
     screens.forEach(screen => {
-        let screenWithoutSocket = Object.assign({}, screen);
-        delete screenWithoutSocket.socket;
-        screensWithoutSocket.push(screenWithoutSocket);
+        screensWithoutSocket.push(getScreenWithoutSocket(screen));
     })
     return screensWithoutSocket;
 }
 
-export function createScreen(socket,name) {
-    let screen = {};
-    screen.socket = socket;
-    screen.online = true;
-    screen.name = name || getWord();
-    screen.id = socket.id;
+export function getScreenWithoutSocket(screen) {
+    let screenWithoutSocket = Object.assign({}, screen);
+    delete screenWithoutSocket.socket;
+    return screenWithoutSocket;
+}
 
+export function initScreen(screen) {
+    screen.online = (screen.online !== undefined)?screen.online:false;
+    screen.name = (screen.name !== undefined && screen.name.length > 0)?screen.name:getWord();
+    screen.id = (screen.socket !== undefined)?screen.socket.id:Math.floor(Math.random() * 10000000000);
+    screen.url = (screen.url !== undefined)?screen.url:'';
+    if (screen.socket !== undefined) {
+        screen.emit = screen.socket.emit.bind(screen.socket);
+    } else {
+        screen.emit = function() {};
+    }
+    if (screen.socket !== undefined) {
+        screen.on = screen.socket.on.bind(screen.socket);
+    } else {
+        screen.on = function() {};
+    }
     return screen;
 }
 
@@ -53,6 +65,8 @@ export function getPositionByName(name) {
 }
 
 export function addScreen(screen) {
+    initScreen(screen);
+    console.log('added: ' + screen.name + ' / ' + screen.id) ;
     if (getScreenByName(screen.name)) {
         console.log('id ' + screen.id + ' (name: '+ screen.name + ' ) already exist: not created');
         return false;
@@ -62,16 +76,17 @@ export function addScreen(screen) {
     screensByName.set(screen.name , screen);
     screens.push(screen);
 
-
-    screen.socket.emit('setName', screen.name);
+    screen.emit('setScreen', getScreenWithoutSocket(screen));
 
     // Manage disconnection
-    screen.socket.on('disconnect',  function() {
+    screen.on('disconnect',  function() {
         onDisconnect(screen.socket);
     });
 
+    console.log('before emit changed');
     listener.emit('changed');
     console.log('created: ' + screen.name + ' / ' + screen.id) ;
+    console.log('infos: ' + getScreenInfos());
     return true;
 
 }
@@ -92,14 +107,19 @@ function onDisconnect(socket) {
         listener.emit('changed');
         screen.online = false;
     };
-    console.log(getScreenInfos());
+    console.log('infos: ' + getScreenInfos());
+    listener.emit('changed');
 }
 
 export function updateScreen(screen) {
     let previousScreen = getScreenByName(screen.name);
     if (previousScreen) {
 
-        console.log(screen.name + ' already existed');
+        console.log(screen.name + ' already existed');;
+
+        // keep url
+        screen.url = previousScreen.url;
+
         console.log('position: '+getPositionByName(screen.name));
         screens[getPositionByName(screen.name)] = screen;
 
@@ -110,6 +130,7 @@ export function updateScreen(screen) {
         screensByName.set(screen.name , screen);
 
         listener.emit('changed');
+        screen.emit('setScreen', getScreenWithoutSocket(screen));
         console.log('updated: ' + screen.name + ' / ' + screen.id) ;
         return true;
     }
@@ -118,7 +139,7 @@ export function updateScreen(screen) {
 }
 
 export function addOrUpdateScreen(screen) {
-
+    console.log('addOrUpdateScreen: ' + screen.name + ' / ' + screen.id);
     // Check if already here
     if (!updateScreen(screen)) {
 

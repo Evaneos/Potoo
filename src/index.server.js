@@ -47,7 +47,7 @@ app.get('/admin', function(req, res){
 });
 
 app.get('/:name*?', function(req, res){
-    console.log(req.params.name);
+    console.log('name: '+ req.params.name);
     const name = decodeURIComponent(req.params.name);
     let url = 'http://www.evaneos.com';
     res.end(iframe({ hostname: req.hostname, webSocketPort, url }));

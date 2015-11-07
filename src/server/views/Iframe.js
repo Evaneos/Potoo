@@ -60,8 +60,9 @@ iframe.watchme_iframe {
             $(".watchme_number").remove();
         })
 
-        socket.on('setName', function(name) {
-            window.history.pushState({}, document.title, "/" + name);
+        socket.on('setScreen', function(screen) {
+            window.history.pushState({}, document.title, "/" + screen.name);
+            $(".watchme_iframe").attr('src', screen.url);
         })
 
         // Connect this screen

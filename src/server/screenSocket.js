@@ -4,6 +4,7 @@ import argv from './argv';
 import { ConsoleLogger } from 'nightingale';
 import errorParser from 'alouette';
 import * as screenFactory from './screenFactory';
+import defaultScreens from './screens';
 
 const logger = new ConsoleLogger('screenSocket');
 
@@ -13,10 +14,13 @@ export const webSocketPort = 3016;
 const server = createServer();
 export const io = socketio(server);
 
-
+defaultScreens.forEach(screen => screenFactory.addScreen(screen));
 
 io.use(function(socket, next) {
+    console.log('initialisation');
+
     var handshakeData = socket.request;
+
     next();
 });
 
@@ -28,15 +32,21 @@ function showNumbers(socket) {
     areNumbersShown = true;
     let i = 1;
     screenFactory.screens.forEach(screen => {
-        screen.socket.emit('showNumber', {number: i, name: screen.name});
+        screen.emit('showNumber', {number: i, name: screen.name});
         i ++;
     })
-    socket.broadcast.to('admin').emit('showNumbers');
+    socket.broadcast.to('admin').emit('showNumbers', true);
 }
 
 function removeNumbers(socket) {
-    screenFactory.screensById.forEach(screen => screen.socket.emit('removeNumber', 'remove'))
-    socket.broadcast.to('admin').emit('removeNumbers');
+    screenFactory.screensById.forEach(screen => screen.emit('removeNumber', 'remove'))
+    socket.broadcast.to('admin').emit('showNumbers', false);
+}
+
+function broadcastScreen(socket) {
+    let screens = screenFactory.getScreensWithoutSocket();
+    console.log('nb screens: ' + screens.length);
+    io.to('admin').emit('screens', screens);
 }
 
 io.on('connection', socket => {
@@ -44,21 +54,28 @@ io.on('connection', socket => {
     console.log('who: ' + who);
     if (who = 'admin') {
         socket.join('admin');
+        socket.broadcast.to('admin').emit('showNumbers', areNumbersShown);
+
+        socket.on('askScreens', function() {
+            socket.emit('screens', screenFactory.getScreensWithoutSocket());
+        })
+        broadcastScreen(socket);
     }
     console.log('new connection');
     socket.on('addScreen', name => {
         name = decodeURIComponent(name.substring(1));
+        let screen = screenFactory.initScreen({socket: socket, name: name, online: true});
         console.log('connection: ' + name + ' / ' + socket.id);
-        console.log(screenFactory.getScreenInfos());
+        console.log('infos: ' + screenFactory.getScreenInfos());
 
-        screenFactory.addOrUpdateScreen(screenFactory.createScreen(socket, name));
+        screenFactory.addOrUpdateScreen(screen);
 
         // ShowNumbers
         if (areNumbersShown) {
             showNumbers();
         }
 
-        console.log(screenFactory.getScreenInfos());
+        console.log('infos: ' + screenFactory.getScreenInfos());
     });
 
 
@@ -73,7 +90,7 @@ io.on('connection', socket => {
 
     screenFactory.listener.on('changed', function() {
         console.log('changed');
-        socket.broadcast.to('admin').emit('screens', screenFactory.getScreensWithoutSocket());
+        broadcastScreen(socket)
     })
 });
 

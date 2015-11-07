@@ -4,7 +4,13 @@ export default function({ hostname, webSocketPort, url }) {
 <html>
 <head>
 <style type="text/css">
+.watchme_screen_toolbar .glyphicon {
+    opacity: 0;
+}
 
+.watchme_screen_toolbar:hover .glyphicon {
+    opacity: 1;
+}
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="http://${ hostname }:${ webSocketPort }/socket.io/socket.io.js"></script>
@@ -42,35 +48,15 @@ export default function({ hostname, webSocketPort, url }) {
             </label>
         </div>
     </div>
-    <div id='screens'>
+    <form id="form_screens">
         <div class="form-group">
-            <div class="btn-group" data-toggle="buttons">
-                <label for="basic-url">Nom de la cha&icirc;ne</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">http://</span>
-                  <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                </div>
+            <div id='screens'>
             </div>
         </div>
         <div class="form-group">
-            <div class="btn-group" data-toggle="buttons">
-                <label for="basic-url">Nom de la cha&icirc;ne</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">http://</span>
-                  <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                </div>
-            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
         </div>
-        <div class="form-group">
-            <div class="btn-group" data-toggle="buttons">
-                <label for="basic-url">Nom de la cha&icirc;ne</label>
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon3">http://</span>
-                  <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-                </div>
-            </div>
-        </div>
-    </div>
+    </form>
 
 </div>
 

@@ -10,13 +10,18 @@ function removeNumbers() {
 }
 
 function renderScreen(screen) {
+    let classOnline = "glyphicon-unchecked";
+    if (screen.online) {
+        classOnline = 'glyphicon-expand';
+    }
   return `
   <div class="form-group">
       <div class="btn-group" data-toggle="buttons">
-          <label for="basic-url">${screen.name}</label>
+          <span class='watchme_screen_toolbar'><span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span> <label for="basic-url">${screen.name}</label> <span class="glyphicon glyphicon-link" aria-hidden="true"></span></span>
           <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">http://</span>
-            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="{screen.url}"></input>
+            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="${screen.url}"></input>
+            <span class="input-group-addon"><span class="glyphicon ${classOnline}" aria-hidden="true"></span></span>
           </div>
       </div>
   </div>
@@ -36,20 +41,22 @@ socket.on('connect', function() {
           }
       });
 
-      socket.on('showNumbers', function(msg) {
+      socket.on('showNumbers', function(areNumbersShown) {
+        if (areNumbersShown) {
           console.log('showNumbers');
           $("#on").attr('checked', true);
           $("#off").attr('checked', false);
           $("#on").parent().addClass('active');
           $("#off").parent().removeClass('active');
-      })
 
-      socket.on('removeNumbers', function(msg) {
+        } else {
           console.log('REMOVENumbers');
           $("#off").attr('checked', true);
           $("#on").attr('checked', false);
           $("#off").parent().addClass('active');
           $("#on").parent().removeClass('active');
+
+        }
       })
 
       socket.on('screens', function(screens) {
@@ -58,6 +65,8 @@ socket.on('connect', function() {
               $("#screens").append(renderScreen(screen));
           })
       })
+
+      socket.emit("askScreens");
 })
 socket.on('error', function(msg) {
       console.log('error:',msg);
@@ -72,6 +81,13 @@ $("[data-showNumbers]").click(function() {
   } else {
       removeNumbers();
   }
-  console.log($('input[name=showNumbers]:checked', '#showNumbers').val());
+
+  $("#form_screens").submit(function(event) {
+    console.log(event);
+      event.stopPropagation();
+      event.preventDefault();
+      return false;
+  })
+
 })
 });

@@ -10,7 +10,7 @@ const logger = new ConsoleLogger('screenSocket');
 
 let areNumbersShown = false;
 
-export const webSocketPort = 3016;
+export const webSocketPort = argv.webSocketPort || 3016;
 const server = createServer();
 export const io = socketio(server);
 

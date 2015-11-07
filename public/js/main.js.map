@@ -1,0 +1,1 @@
+{"version":3,"sources":["main.js"],"names":[],"mappings":";;gCAAuB,qBAAqB;;AAC5C,+BAAQ,CAAC;AACT,MAAM,CAAC,SAAS,GAAG,OAAO,CAAC,qBAAqB,CAAC,CAAC","file":"main.js","sourcesContent":["import { create } from './browser/webSocket';\ncreate();\nwindow.webSocket = require('./browser/webSocket');\n"],"sourceRoot":"/"}

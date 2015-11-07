@@ -1,0 +1,48 @@
+{
+  "name": "WatchMe",
+  "private": true,
+  "version": "0.1.0",
+  "description": "watch me!",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "WatchMe team :)",
+  "license": "MIT",
+  "dependencies": {
+    "alouette": "^3.0.3",
+    "babel-runtime": "^5.8.20",
+    "basic-auth": "^1.0.3",
+    "cookie-parser": "^1.4.0",
+    "express": "^4.13.3",
+    "gulp-sass": "^2.1.0",
+    "minimist": "^1.1.3",
+    "nightingale": "^1.1.1",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "socket.io": "^1.3.7"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.8.2",
+    "gulp": "gulpjs/gulp#bbe3c56138a9ede627879d7e47daffd0a6d9b6db",
+    "gulp-babel": "^5.2.0",
+    "gulp-changed": "^1.3.0",
+    "gulp-clip-empty-files": "^0.1.1",
+    "gulp-grep": "^0.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-stylus": "^2.0.6",
+    "springbokjs-daemon": "^0.2.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "public"
+    },
+    "dependencies": {
+      "babel-runtime": "npm:babel-runtime@^5.8.20",
+      "core-js": "npm:core-js@^1.0.1"
+    },
+    "devDependencies": {}
+  }
+}
